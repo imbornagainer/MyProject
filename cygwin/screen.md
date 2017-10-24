@@ -4,6 +4,9 @@
 * Install
   * screen 이라는 명령어를 실행했을때 명령어가 없다고 나오면 아래와 같이 설치를 해줍니다.
 
+* cygwin
+  * apt-cyg install screen
+
 * RedHat계열 (RedHat, CentOS, Fedora 등...)
   * yum install screen
   * Debian 계열(Ubuntu 등..)
