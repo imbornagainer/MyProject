@@ -12,8 +12,10 @@
   * Debian 계열(Ubuntu 등..)
   * apt-get install screen
 
-* 사용법
-  * 추가 환경 설정
+* 사용법 - 참고 url
+ * http://dreamlog.tistory.com/470
+
+* 추가 환경 설정
   * 아래와 같이 설정 파일을 추가해주면 Screen 사용 시 좀 더 편해집니다. 적용하시는 것을 추천합니다. 각 가상 터미널의 창 구분도 되고 시계도 표시되는 등 더 보기 편해집니다.
   
 * vi ~/.screenrc
