@@ -25,4 +25,3 @@ bindkey -k k1 select 0
 bindkey -k k2 select 1
 bindkey -k k3 select 2
 왼쪽이 추가 환경 설정이 적용된 모습이며 오른쪽이 아무 설정도 하지 않고 screen을 실행했을 시 모습입니다. 추가 환경 설정을 하여 Screen을 사용하고 있는지, 어느 가상 터미널에 있는지 확인할 수 있습니다.
-Image
