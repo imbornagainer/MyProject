@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Author : hwijinkim , https://github.com/jeonghoonkang
+# Author : hwijinkim , https://github.com/imbornagainer
 
 # openTSDB의 metrics를  복사하기 위한 class 
 # last modified by 20171024
