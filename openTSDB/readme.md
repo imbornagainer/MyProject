@@ -20,5 +20,7 @@ opentsdb@PaaS:~$ screen -list
      * 2 Sockets in /var/run/screen/S-opentsdb.
 opentsdb@PaaS:~$ screen -r opentsdb
 
-CTRL + C
+CTRL + C - (openTSDB restart)
 ↑ 키 눌러서  02_~~~~ 쉘스크립트 실행
+
+Ctrl A + D (화면만 나옴 - 입력된 명령어는 실행중)
