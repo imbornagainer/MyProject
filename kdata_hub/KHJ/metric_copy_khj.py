@@ -2,7 +2,7 @@
 # Author : hwijinkim , https://github.com/imbornagainer
 
 # openTSDB의 metrics를  복사하기 위한 class 
-# last modified by 20171024
+# last modified by 20171025
 
 import time
 import datetime
@@ -13,8 +13,6 @@ import json
 import argparse
 import calendar
 import urllib2
-from operator import itemgetter, attrgetter
-import ast
 
 # OpenTSDB 클래스
 # EE db 는 15분 단위의 데이터를 저장하고 있음
@@ -87,46 +85,7 @@ class u_ee_tsdb :
         self.__cin_etime = _tmp 
         print _tmp
         assert(self.__cin_stime < self.__cin_etime )
-        return _tmp
-
-    ''' 
-    함수 : readTSDB
-    특정 시간의 TSDB값 반환
-    parameter1 (in_st) : 시작 시각
-    parameter2 (in_et) : 종료 시각
-    parameter3 (mid) : 미터기 아이디
-    반환 (packetlist_filter) : database 값 리스트(list) 
-    '''
-
-    def read_otsdb(self, __in_st, __in_et, __mid):
-        packetlist = []  # split :
-        packetlist_filter = []  # integer
-
-        # YYYY/MM/DD-HH:00:00
-        start = "%s/%s/%s-%s:00:00" % (__in_st[0:4], __in_st[4:6], __in_st[6:8], __in_st[8:10])
-        end = "%s/%s/%s-%s:00:00" % (__in_et[0:4], __in_et[4:6], __in_et[6:8], __in_et[8:10])
-        tsdb_url = t_url + start + "&end=" + end + "&m=avg:test_daily_led" + "{MDS_ID=" + str(mid) + "}"
-
-        tsdbdata = urllib2.urlopen(url_tsdb)
-        read_query = tsdbdata.read()
-
-        print read_query
-        exit(-1)
-        # 이부분은 사용하지 않음, ast 함수 사용
-
-        packets = dataParser(read_query)
-        packet = packets.split(',')
-
-        for k in range(len(packet)):
-            packetlist.append(packet[k].split(":"))
-            tmp = packetlist[k][0]
-            packetlist_filter.append([int(tmp[1:len(tmp) - 1]), float(packetlist[k][1])])
-
-        #mid 추가
-        for k in range(len(packetlist_filter)):
-            packetlist_filter[k].append(mid)
-
-        return packetlist_filter
+        return _tmp   
 
     '''
     ## 함수 : calDate
@@ -233,84 +192,11 @@ class u_ee_tsdb :
 
         return re_mdh
 
-    '''
-    ## 함수 : get_tsdb_value
-    데이터베이스에 데이터가 있는지 여부를 확인하고
-    데이터가 있으면 측정 수치 수집
-    주의 : 메트릭만으로 판단 (tag 까지는 확인 안함, 추후 tag 검색 추가 필요)
-    반환 (empty_flag) : 비어있을 경우 1 / 비어있지 않을 경우 0
-    '''
-    def get_tsdb_value(self, _tag = None):
-        _st = self.__cin_stime
-        _et = self.__cin_etime
-        _m  = self.__cin_metric_name
-
-        # 형식 YYYY/MM/DD-HH:00:00
-        starttime = "%s/%s/%s-%s:00:00" % (_st[0:4], _st[4:6], _st[6:8], _st[8:10])
-        endtime   = "%s/%s/%s-%s:00:00" % (_et[0:4], _et[4:6], _et[6:8], _et[8:10])
-
-        # 참고 : "{"는 URL창에 %7B 로 표현됨
-        url_tsdb = self.__cin_url + "start=" + starttime + "&end=" + endtime + "&m=sum:" + _m + _tag
-
-        try :
-            tsdbdata = urllib2.urlopen(url_tsdb)
-            _read_buf = tsdbdata.read() # get string of TSDB value
-
-        except urllib2.HTTPError as e:
-            error_msg = e.read()
-            print "\n < There is no data in TSDB of requested Metric or Tag : %s> \n" %_tag
-            #print "\n < BerePi grep error message from Server > \n\n", error_msg
-            return False, '[]' 
-
-        except urllib2.URLError as e:
-            if hasattr(e, 'reason'):
-                print 'Reason: ', e.reason
-            elif hasattr(e, 'code'):
-                print 'Error code: ', e.code
-            print "\n < Timeout error : %s> \n" %_tag
-            return False, '[]'
-        
-        if _read_buf !='[]' : 
-            _ext_f = True
-            _read_buf = _read_buf[1:-1]
-            _buf_dict = ast.literal_eval(_read_buf)
-        else : 
-            _ext_f = False
-            _buf_dict = _read_buf
-
-        #print type(_buf_dict)
-        #print _buf_dict
-
-        return _ext_f, _buf_dict
-
-    '''
-    ## 함수 : readTSD
-    parameter1 (in_datelist) : 시각 리스트
-    parameter2 (in_mdsid_list) : 미터기 아이디 리스트
-    반환 (retList) : 비어있지 않은 아이디 리스트
-    (예) http://xxx.xxx.xxx.xxx:4242/#start=2016/11/01-00:00:00&end=2017/03/01-00:00:00
-    &m=sum:origin_data_please{factory_mart=mart,led_inverter=led}
-    '''
-    def readTSD(self, _tag = None) :
-        _m = self.__cin_metric_name
-        _p = self.__cin_datelist
-        s = ''
-        if _tag != None: 
-            for (k, v) in _tag.items():
-                s += '%s=%s,' % (k, v)
-            s = '{' + s[:-1] + '}'
-
-        _existence, _val = self.get_tsdb_value(s)
-
-        if _existence == False : return None
-        
-        return _val   
-
     def readTSDrecent(self,  _tag = None, _agg = None, _start = '10m-ago', _end = "10m-later") :
         #if self.__cin_recent != 'True' : exit (" <Error> check call for *recent* ")
         _u = self.__cin_url
         _m = self.__cin_metric_name
-        if _agg == None : _agg = 'sum'
+        if _agg == None : _agg = 'none'
 
         url = '%sstart=%s' % (_u, _start)
         url += '&end=%s' % (_end)
@@ -416,13 +302,6 @@ def parse_args():
     
     return url, port, start, end, recent, m
 
-def ptest(__url, __st, __et, __m):
-    tsdbclass = u_ee_tsdb(__url, __st, __et)
-    tag = __m
-    if (tag == None) : return
-    tsdbclass.set_metric(tag)
-    print tsdbclass.readTSD()
-
 def rtest(__url, __m, __tag, __stime, __etime):
     tsdbclass = u_ee_tsdb(__url, None, None, True)
     tsdbclass.set_metric(__m)    
@@ -435,13 +314,6 @@ def rtest(__url, __m, __tag, __stime, __etime):
     # print tsdbclass.readTSDrecent(tag, 'sum', __stime)
     list_data = tsdbclass.readTSDrecent(tag, 'none', stime, etime)
     return list_data
-
-def point(__url, __m, __time, __tag):
-    tsdbclass = u_ee_tsdb(__url, __time)
-    tsdbclass.set_metric(__m)
-    tag = __tag
-    if (tag == None) : return
-    print tsdbclass.readOnePoint(__time, tag, 'sum')
 
 def printProgress (iteration, total, prefix = '', suffix = '', decimals = 1, barLength = 100):
     formatStr = "{0:." + str(decimals) + "f}"
@@ -468,7 +340,7 @@ if __name__ == "__main__":
         exit()
     
     print '<총 {0!r}개의 데이터 추출>\n'.format(len(get_list_data))
-    for i in range(len(get_list_data)):        
+    for i in range(len(get_list_data)):
         modem_num = get_list_data[i]['tags']['modem_num']
         mds_id = get_list_data[i]['tags']['_mds_id']
         holiday = get_list_data[i]['tags']['holiday']
@@ -477,7 +349,7 @@ if __name__ == "__main__":
         device_type = get_list_data[i]['tags']['device_type']
         building = get_list_data[i]['tags']['building']
         
-        progress_num += 1        
+        progress_num += 1
         for (unix_time, value) in get_list_data[i]['dps'].items():
             input_data = {
                 "metric": new_metric,
@@ -503,4 +375,3 @@ if __name__ == "__main__":
         printProgress(progress_num, len(get_list_data[i]['dps']), 'Progress:', 'Complete', 1, 50) # show progress
         print '\n'
     print 'end!\n'
-    
