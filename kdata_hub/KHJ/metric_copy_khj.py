@@ -319,16 +319,12 @@ class u_ee_tsdb :
         #_tag_dict = ast.literal_eval(_tag)
         #assert isinstance(_tag, dict)
         if 0:
-            print len(_tag)
-            print '5번'
             if (len(_tag) == 0):
-                print '6번'
                 url += '{'
                 for (k, v) in _tag.items():
                     url += '%s=%s,' % (k, v)
                 url = url[:-1] + '}'
                 print "url : %s" % url
-                print '7번'
                 try : ret = requests.get(url=url)
                 except:
                     print " <Error>... get restful"
