@@ -277,7 +277,7 @@ def parse_args():
     parser.add_argument("-end", default='2016/07/02-00:00:00', help="end time input, like 2016/07/02-00:00:00")
     parser.add_argument("-port", default=4242, help="port input, like 4242")
     parser.add_argument("-recent", default="True", help="Time input for recent value")
-    parser.add_argument("-m", default="rc04_add_tag_v4", help="metric name")
+    parser.add_argument("-m", default="rc04_add_tag_v4", help="metric ")
     args = parser.parse_args()
     
     #check args if valid
