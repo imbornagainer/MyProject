@@ -85,3 +85,49 @@ Ctrl-a, Q : 현재 region을 제외한 나머지 숨기기
 
 그리고 마지막 명령으로 세션을 완전히 빠져 나오는 명령입니다.
 exit : screen 의 쉘상에서 exit 를 치고 엔터를 하면 세션이 완전히 종료 됩니다.
+
+### 좀더 추가된 명령어 - 삭제
+```
+시작. : screen -S 세션명
+
+Ctrl+a A :현재 screen의 이름을 정한다. (나중에 Ctrl+a w 나 Ctrl+a "로 볼때 이름이 다 똑같아서 정의해 놓는게 정신건강에 좋다)
+Ctrl+a c : screen에서 새창 띄우기
+Ctrl+a k : 현재 screen 죽이기.
+
+
+Ctrl+a a : 바로 전 창으로
+Ctrl+a n : 다음 창으로 
+Ctrl+a p: 이전 창으로 
+
+Ctrl+a " : 열린 screen list 을 보여줌.
+
+Ctrl+a 0 : 0번째 창으로
+Ctrl+a 1 : 1번째 창으로
+Ctrl+a 9 : 10번째 창으로
+
+Ctrl+a d : screen 때어내기 (현재 상태로 남겨두는거..)
+Ctrl+a x : 이전에 남겨둔 screen에 다시 붙이기.
+screen -r 세션명 : 강제로 종료된거에 다시 붙이기
+
+ps -eaf | grep screen : 여러개 열려있을 경우 찾아서 죽여주는 센스.
+
+screen -list : 현재 열려있는 리스트를 보여줌.
+
+Ctrl+a ?  : 도움말
+Ctrl+a k  : 스크린 닫기
+Ctrl+a ESC, Ctrl+a [   : 화면 스크롤
+Ctrl+a ] : 붙여넣기.
+
+Ctrl+a S          화면 수평 분할
+Ctrl+a |            화면 수직 분할
+Ctrl + a :resize   resize region 
+Ctrl + a :fit         fit screen size to new terminal size
+Ctrl +a :remove  remove region
+Ctrl+a Q           현재 region을 제외한 나머지 숨기기
+Ctrl+ a tab      화면 분할 이동
+Ctrl+a, :            명령행 모드로 전환
+
+Ctrl+ X        : 현재 화면 닫기
+
+마지막 종료는 exit로 하면 깔끔하게 나온다고 함.
+```
