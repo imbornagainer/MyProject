@@ -26,3 +26,28 @@
   * -s : 심볼릭 링크파일을 생성
   * -S : 백업파일 생성시에 원하는 접미사(suffix)를 지정할 수 있음
   * -t, --target-directory=DIRECTORY : 링크파일을 생성할 디렉토리를 지정
+
+### sh
+  ```
+  리눅스 쉘 스크립트(.sh) 실행방법
+  1. 파일권한을 변경하고 2.실행한다.
+  실행명령어 1번 chmod +x filename.sh
+  실행명령어 2번 sh filename.sh
+
+  실행명령어 2번에 ./filename.sh 해도 된다.
+
+  현재 쉘 확인
+  실행명령어 echo $SHELL
+  /bin/bash
+
+  현재 등록된 path 확인
+  실행명령어 env
+
+  현재 등록된 path만 보고 싶을때
+  실행명령어 echo $PATH
+
+  쉘 환경변수 설정
+  etc/profile
+  etc/bashrc
+  사용자 홈디렉토리/.bashrc
+  ```
