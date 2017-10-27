@@ -131,3 +131,13 @@ Ctrl+ X        : 현재 화면 닫기
 
 마지막 종료는 exit로 하면 깔끔하게 나온다고 함.
 ```
+
+```
+$ pkill screen - 삭제
+
+(또는 pkill screen)
+
+$ screen -list
+
+No Sockets found in /var/run/screen/S-deploy.
+```
